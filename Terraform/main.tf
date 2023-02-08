@@ -1,20 +1,20 @@
-resource "azurerm_resource_group" "rg" {
-  location = var.aks_cluster.resource_group_location
+data "azurerm_resource_group" "rg" {
+  #location = var.aks_cluster.resource_group_location
   name     = var.aks_cluster.resource_group_name
 }
 
 resource "azurerm_log_analytics_workspace" "bbw" {
   name                = var.aks_cluster.log_analytcs_name
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
+  location            = data.azurerm_resource_group.rg.location
+  resource_group_name = data.azurerm_resource_group.rg.name
   sku                 = var.aks_cluster.log_analytcs_sku
   retention_in_days   = var.aks_cluster.log_analytcs_retention_in_days
 }
 
 resource "azurerm_kubernetes_cluster" "k8s" {
-  location                         = azurerm_resource_group.rg.location
+  location                         = data.azurerm_resource_group.rg.location
   name                             = var.aks_cluster.cluster_name
-  resource_group_name              = azurerm_resource_group.rg.name
+  resource_group_name              = data.azurerm_resource_group.rg.name
   dns_prefix                       = var.aks_cluster.dns_prefix
   sku_tier                         = var.aks_cluster.sku_tier
   http_application_routing_enabled = var.aks_cluster.http_application_routing_enabled

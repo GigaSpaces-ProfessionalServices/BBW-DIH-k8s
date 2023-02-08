@@ -1,0 +1,3 @@
+tcp:
+  8090: "default/xap-xap-manager-service:8090"
+  3000: "default/xap-grafana:3000"
