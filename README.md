@@ -2,7 +2,7 @@
 
 ## Prerequisites
 ---------------
-**You can create a predefined Jumper VM in azure, which is already have all the required tools**
+**You can create a predefined Jumper VM in azure, with all the required tools**
 
 ---------------
 ### Install jumper tools using a script (for centos/redhat)
