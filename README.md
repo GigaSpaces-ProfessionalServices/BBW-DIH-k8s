@@ -1,6 +1,6 @@
 # BBW - DIH on azure
 
-## Prerequisites
+# Prerequisites
 ---------------
 **You can create a predefined Jumper VM in azure, with all the required tools**
 
@@ -18,7 +18,7 @@ export ARM_SUBSCRIPTION_ID="xxxxxxxxxxxx" <will be provided separately>
 export ARM_TENANT_ID="xxxxxxxxxxxx" <will be provided separately>
 ```
 
-## Create an AKS cluster (k8s on azure)
+# Create an AKS cluster (k8s on azure)
 
 ```
 ./create-aks-cluster.sh
@@ -53,7 +53,7 @@ To check the Availability Zones run:
 ./uninstall-dih-umbrella.sh
 ```
 -----------
-## Destroy (delete) the AKS cluster
+# Destroy (delete) the AKS cluster
 You can destroy the AKS cluster from azure portal or using Terraform:
 ```
 ./destroy-aks-cluster.sh
