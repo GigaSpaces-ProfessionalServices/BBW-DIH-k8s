@@ -16,5 +16,5 @@ terraform {
 provider "azurerm" {
   features {}
   skip_provider_registration = "true"
-  subscription_id = "b5cedc24-5bf7-4266-a3c8-c8ab9149b4fe" #support.gigaspaces.com
+  
   }

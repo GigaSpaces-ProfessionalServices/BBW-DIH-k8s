@@ -9,8 +9,15 @@
 ```
 ./install-jumper-tools.sh
 ```
-
 ----------
+## Export the ARM variables
+```
+export ARM_CLIENT_ID="xxxxxxxxxxxx" <will be provided separately>
+export ARM_CLIENT_SECRET="xxxxxxxxxxxx" <will be provided separately>
+export ARM_SUBSCRIPTION_ID="xxxxxxxxxxxx" <will be provided separately>
+export ARM_TENANT_ID="xxxxxxxxxxxx" <will be provided separately>
+```
+
 ## Create an AKS cluster (k8s on azure)
 
 ```

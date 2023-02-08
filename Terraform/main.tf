@@ -1,5 +1,4 @@
 data "azurerm_resource_group" "rg" {
-  #location = var.aks_cluster.resource_group_location
   name     = var.aks_cluster.resource_group_name
 }
 
