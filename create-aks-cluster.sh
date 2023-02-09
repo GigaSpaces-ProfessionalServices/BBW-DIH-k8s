@@ -3,25 +3,22 @@ SCRIPT=$(realpath "$0")
 SCRIPTPATH=$(dirname "$SCRIPT")
 cd $SCRIPTPATH
 
-default_subscription_id="b5cedc24-5bf7-4266-a3c8-c8ab9149b4fe"
 resource_group_name="csm-bbw"
-
+clear
 echo 
 echo "Welcome to the DIH-azure-k8s provisioner"
 echo "----------------------------------------"
 echo
-#read -p "azure subscription-id [$default_subscription_id]: " newsubid
+echo "Testing azure login status ..."
+[[ $(az login --service-principal --username $ARM_CLIENT_ID --password $ARM_CLIENT_SECRET --tenant $ARM_TENANT_ID) ]] && (echo "logged in to azure.") || (echo "Unable to log in to azure.";exit)
+echo
+echo "Create a new AKS cluster:"
+echo "========================="
+echo
 read -p "Cluster name: " clustername
 read -p "Project: " project
 read -p "Owner: " owner
 read -p "Would like to install the dih umbrella? (y to install or any key to skip) " umbrella
-
-if [[ -z $newsubid ]]
-then 
-    subscription_id=$default_subscription_id
-else
-    subscription_id=$newsubid
-fi
 
 if [[ "$umbrella" == [Yy]* ]]
 then
@@ -41,12 +38,14 @@ sed -i "s/_Owner/$owner/g" Terraform/variables.tf
 sed -i "s/_Project/$project/g" Terraform/variables.tf
 
 cd Terraform
+terraform workspace new $clustername
 terraform init
 terraform plan -out ${clustername}.out
 terraform apply ${clustername}.out
+rm ${clustername}.out
 
 #config kubectl
-az account set --subscription $subscription_id
+az account set --subscription $ARM_SUBSCRIPTION_ID
 az aks get-credentials --resource-group $resource_group_name --name $clustername
 
 if [[ $install_unbrella = 0 ]]

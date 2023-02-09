@@ -23,23 +23,8 @@ kubectl apply -f helm/ingress-rule-dashbord.yaml
 helm install ingress-nginx ingress-nginx/ingress-nginx -f helm/ingress-values.yaml
 
 ### Create k8s token for dashboard
-./create-k8s-token.sh
+./generate-k8s-token.sh
 
 ### To find out your ingress public IP
-kubectl get svc ingress-nginx-controller |awk '{print $4}'|tail -1 > k8s-ingress-ip.txt
-echo =========================================
-echo "GUI url list:"
-echo "-------------
-ops-manager:     http://$(cat k8s-ingress-ip.txt):8090
-grafana:         http://$(cat k8s-ingress-ip.txt):3000
-k8s dashboard:   https://$(cat k8s-ingress-ip.txt)
-=========================================
-
-You can find the k8s token at: k8s-token.txt
-
-"
-echo "To login to k8s dashboard use this token:"
-echo
-cat k8s-token.txt
-
+./get-ui-url.sh
 

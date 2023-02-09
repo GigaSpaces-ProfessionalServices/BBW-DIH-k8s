@@ -2,7 +2,13 @@
 SCRIPT=$(realpath "$0")
 SCRIPTPATH=$(dirname "$SCRIPT")
 cd $SCRIPTPATH
-read -r -p "Do you want to destroy your EKS lab ?[y/n] " response
+
+cd Terraform
+terraform workspace list
+
+read -p "Please enter your cluster name: " clustername
+read -r -p "Are sure you want to destroy [ $clustername ] AKS cluster?[y/n] " response
+
 case "$response" in
     [yY][eE][sS]|[yY]) 
         
@@ -12,7 +18,12 @@ case "$response" in
         exit
         ;;
 esac
-./uninstall-dih-umbrella.sh
-cd Terraform
-terraform plan -destroy -out destroy.out
-terraform apply "destroy.out"
+
+../uninstall-dih-umbrella.sh
+
+terraform workspace select $clustername
+terraform plan -destroy -out destroy-$clustername.out
+terraform apply "destroy-$clustername.out"
+terraform workspace select default
+terraform workspace workspace delete $clustername
+rm destroy-$clustername.out

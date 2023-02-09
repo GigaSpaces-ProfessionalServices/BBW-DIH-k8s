@@ -1,5 +1,10 @@
 # BBW - DIH on azure
 
+## Goal:
+* Provision a k8s cluster in azure (AKS)
+* Update kubeconfig with the new cluster
+* Install the DIH umbrella + ingress and k8s dashboard
+-----------
 # Prerequisites
 ---------------
 **You can create a predefined Jumper VM in azure, with all the required tools**
