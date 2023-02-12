@@ -46,7 +46,7 @@ rm ${clustername}.out
 
 #config kubectl
 az account set --subscription $ARM_SUBSCRIPTION_ID
-az aks get-credentials --resource-group $resource_group_name --name $clustername
+az aks get-credentials --resource-group $resource_group_name --name $clustername --overwrite-existing
 
 if [[ $install_unbrella = 0 ]]
 then

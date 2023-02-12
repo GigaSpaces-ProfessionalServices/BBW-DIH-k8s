@@ -3,8 +3,8 @@ variable "aks_cluster" {
   default = {
     resource_group_name              = "csm-bbw"
     resource_group_location          = "eastus"
-    cluster_name                     = "shmulik-test-2"
-    dns_prefix                       = "shmulik-test-2"
+    cluster_name                     = "bbw-shmulik"
+    dns_prefix                       = "bbw-shmulik"
     node_pool_name                   = "bbwnodepool"
     vm_size                          = "Standard_B4ms"
     sku_tier                         = "Paid"
@@ -13,7 +13,7 @@ variable "aks_cluster" {
     min_count                        = 3
     max_count                        = 5
     http_application_routing_enabled = true
-    log_analytcs_name                = "shmulik-test-2"
+    log_analytcs_name                = "bbw-shmulik"
     log_analytcs_retention_in_days   = 30
     log_analytcs_sku                 = "PerGB2018"
 
