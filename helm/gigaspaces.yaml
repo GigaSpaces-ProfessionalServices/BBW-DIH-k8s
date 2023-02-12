@@ -2,7 +2,7 @@ metric:
    enabled: true
 manager:
    service:
-      type: LoadBalancer
+      type: ClusterIP
       api:
          enabled: true
          port: 8090
@@ -20,5 +20,5 @@ manager:
    ha: true
    java:
       heap: limit-300Mi
-   license: "Product=InsightEdge;Version=16.2;Type=ENTERPRISE;Customer=Gigaspaces_K8sAWSEnvTraining_DEV;Expiration=2025-Jan-01;Hash=PPSPYPQcOrQZvNSfORgd"
-license: "Product=InsightEdge;Version=16.2;Type=ENTERPRISE;Customer=Gigaspaces_K8sAWSEnvTraining_DEV;Expiration=2025-Jan-01;Hash=PPSPYPQcOrQZvNSfORgd"
+   license: "Product=InsightEdge;Version=16.3;Type=ENTERPRISE;Customer=Gigaspaces_Demo_PROD;Expiration=2023-Dec-31;Hash=VQdZNeFX6EO6RaABKNR6"
+license: "Product=InsightEdge;Version=16.3;Type=ENTERPRISE;Customer=Gigaspaces_Demo_PROD;Expiration=2023-Dec-31;Hash=VQdZNeFX6EO6RaABKNR6"
