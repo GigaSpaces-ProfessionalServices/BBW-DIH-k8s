@@ -17,5 +17,6 @@ sudo yum install -y wget vim unzip git terraform azure-cli maven
 wget https://s3.eu-west-1.amazonaws.com/shmulik.kaufman/bbw/jdk-11.0.17_linux-x64_bin.rpm
 sudo rpm -ivh jdk-11.0.17_linux-x64_bin.rpm
 rm -rf ./get_helm.sh jdk-11.0.17_linux-x64_bin.rpm kubectl
-echo "clear" >> /home/centos/.bashrc
-echo "cat ~/BBW-DIH-k8s/Jumper/.banner.txt" >> /home/centos/.bashrc
+cp ~/BBW-DIH-k8s/Jumper/.banner.txt /home/centos/
+echo "clear" >> /home/centos/.bashrc 
+echo "cat /home/centos/.banner.txt" >> /home/centos/.bashrc
