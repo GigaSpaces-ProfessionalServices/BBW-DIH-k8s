@@ -7,13 +7,8 @@
 -----------
 # Prerequisites
 ---------------
-**You can create a predefined Jumper VM in azure, with all the required tools**
+**You should use a predefined Jumper for azure**
 
----------------
-### Install jumper tools using a script (for centos/redhat)
-```
-./install-jumper-tools.sh
-```
 ----------
 ## Export the ARM variables
 ```

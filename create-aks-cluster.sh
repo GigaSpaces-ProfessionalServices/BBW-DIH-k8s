@@ -10,7 +10,7 @@ echo "Welcome to the DIH-azure-k8s provisioner"
 echo "----------------------------------------"
 echo
 echo "Testing azure login status ..."
-[[ $(az login --service-principal --username $ARM_CLIENT_ID --password $ARM_CLIENT_SECRET --tenant $ARM_TENANT_ID) ]] && (echo "logged in to azure.") || (echo "Unable to log in to azure.";exit)
+[[ $(az login --service-principal --username $ARM_CLIENT_ID --password $ARM_CLIENT_SECRET --tenant $ARM_TENANT_ID) ]] && (echo "logged in to azure.") || (echo "Unable to log in to azure. Please validate ARM_CLIENT_ID, ARM_CLIENT_SECRET, ARM_SUBSCRIPTION_ID, ARM_TENANT_ID.";exit)
 echo
 echo "Create a new AKS cluster:"
 echo "========================="
