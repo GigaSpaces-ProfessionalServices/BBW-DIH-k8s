@@ -4,7 +4,7 @@ clusteringress=$(kubectl get svc ingress-nginx-controller |awk '{print $4}'|tail
 
  
 echo "============================================="
-echo "GUI url list for cluster [ $clustername ]"
+echo "Ingress table for [ $clustername ]"
 echo "--------------------------------------------"
 echo
 echo "ops-manager:     http://${clusteringress}:8090"
