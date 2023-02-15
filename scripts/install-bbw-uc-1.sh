@@ -16,7 +16,7 @@ ingress_helm_repo=https://kubernetes.github.io/ingress-nginx
 resource_group_name=csm-bbw
 ###############################
 echo "Fetching clusters ..."
-az aks list
+az aks list -o table
 echo
 read -p "Please provide a Cluster Name: " clustername
 #config kubectl

@@ -5,7 +5,7 @@ cd $SCRIPTPATH
 source ./setEnv.sh
 
 echo "Fetching clusters ..."
-az aks list
+az aks list -o table
 echo
 read -p "Please provide the Cluster Name to remove the umbrellas: " clustername
 #config kubectl
