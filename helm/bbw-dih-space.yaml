@@ -1,0 +1,9 @@
+metric:
+   enabled: true
+antiAffinity:
+   enabled: true
+ha: true
+manager:
+   name: bbw-dih
+partitions: 1
+license: "Product=InsightEdge;Version=16.3;Type=ENTERPRISE;Customer=Gigaspaces_Demo_PROD;Expiration=2023-Dec-31;Hash=VQdZNeFX6EO6RaABKNR6"

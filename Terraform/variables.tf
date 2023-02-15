@@ -3,8 +3,8 @@ variable "aks_cluster" {
   default = {
     resource_group_name              = "csm-bbw"
     resource_group_location          = "eastus"
-    cluster_name                     = "Nihar"
-    dns_prefix                       = "Nihar"
+    cluster_name                     = "shmulik"
+    dns_prefix                       = "shmulik"
     node_pool_name                   = "bbwnodepool"
     vm_size                          = "Standard_B4ms"        # Standard_B4ms: 4vCPU, 16GB   Standard_B8ms: 8vCPU, 32GB
     sku_tier                         = "Paid"
@@ -13,7 +13,7 @@ variable "aks_cluster" {
     min_count                        = 3
     max_count                        = 5
     http_application_routing_enabled = true
-    log_analytcs_name                = "Nihar"
+    log_analytcs_name                = "shmulik"
     log_analytcs_retention_in_days   = 30
     log_analytcs_sku                 = "PerGB2018"
 
@@ -30,7 +30,7 @@ variable "tags" {
   default = {
 
     Environment = "Development"
-    Owner       = "Nihar"
+    Owner       = "shmulik"
     Project     = "bbw"
     gspolicy    = "noprod"
 
