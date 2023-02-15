@@ -55,6 +55,9 @@ $script_dir/ingress-table-generic.sh
 ### Create k8s token for dashboard
 $script_dir/generate-k8s-token.sh
 
+### Get grafana admin password
+$script_dir/get-grafana-pass.sh
+
 echo
 read -p "Enter any key to back to the menu..." key
 echo

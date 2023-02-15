@@ -13,7 +13,7 @@ cd $work_dir/Terraform
 terraform workspace list
 
 read -p "Please enter your cluster workspace name: " clustername
-read -r -p "Are sure you want to destroy [ $clustername ] AKS cluster?[y/n] " response
+read -r -p "Are sure you want to destroy [ $clustername ] AKS cluster? [y/n] " response
 
 case "$response" in
     [yY][eE][sS]|[yY]) 
