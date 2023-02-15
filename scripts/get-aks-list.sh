@@ -16,7 +16,7 @@ echo "Testing azure login status ..."
 echo
 
 echo "Fetching clusters ..."
-az aks list
+az aks list -o table
 echo
 read -p "Enter any key to back to the menu..." key
 echo
