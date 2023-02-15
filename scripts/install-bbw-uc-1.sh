@@ -34,9 +34,9 @@ cd ..
 
 ### Deploy BBW space
 clusteringress=$(kubectl get svc ingress-nginx-controller |awk '{print $4}'|tail -1)
-while [ $(/usr//bin/curl -s -o /dev/null -w %{http_code} http://${clusteringress}:8090/) -eq 000 ] ; do
-  echo -e $(date) " Ops Manager HTTP state: " $(/usr/bin/curl -s -o /dev/null -w %{http_code} http://${clusteringress}:8090/) " (waiting for 200)"
-  sleep 3
+until $(curl --output /dev/null --silent --head --fail http://${clusteringress}:8090); do
+    printf '.'
+    sleep 2
 done
 helm install bbw-dih-space gigaspaces-repo-ea/xap-pu --version $dih_version #-f $helm_dir/bbw-dih-space.yaml
 
@@ -48,6 +48,7 @@ kubectl apply -f $kafka_producer_dir/deployment.yaml
 ### Deploy BBW Pluggable connector
 helm install bbw-dih-pc $kafka_producer_dir/helm-chart/pluggable-connector
 
+$script_dir/ingress-table-uc-1.sh
 echo
 read -p "Enter any key to back to the menu..." key
 echo

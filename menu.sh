@@ -25,10 +25,12 @@ case "$choice" in
     2) $script_dir/create-aks-cluster.sh        
         ;;
 
-    3) $script_dir/install-dih-umbrella-generic.sh
+    3)  echo "Install the generic DIH umbrella on an existing AKS cluster"
+        $script_dir/install-dih-umbrella-generic.sh
         ;;
     
-    4) $script_dir/install-bbw-uc-1.sh
+    4)  echo "Install the bbw use-case-1 umbrella on an existing AKS cluster"
+        $script_dir/install-bbw-uc-1.sh
         ;;
     
     5) $script_dir/uninstall-menu.sh

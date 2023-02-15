@@ -19,14 +19,12 @@ read -p ">> " choice
 
 case "$choice" in
     1) $script_dir/uninstall-dih-umbrella-generic.sh
-        
         ;;
+
     2) $script_dir/uninstall-bbw-uc1.sh
         ;;
     
-    3) $script_dir/uninstall-dih-umbrella-generic.sh
-       $script_dir/uninstall-bbw-uc1.sh
-
+    3)  /home/centos/BBW-DIH-k8s/scripts/uninstall-all-umbrellas.sh
         ;;
     
     4) $script_dir/destroy-aks-cluster.sh
@@ -36,8 +34,7 @@ case "$choice" in
         exit
         ;;
 
-    *)
-        ./menu.sh
+    *)  ./menu.sh
         exit
         ;;
 esac
