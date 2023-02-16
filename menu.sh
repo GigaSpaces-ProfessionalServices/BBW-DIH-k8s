@@ -9,7 +9,7 @@ clear
 echo "Welcome to DIH Builder on Azure!"
 echo "--------------------------------"
 echo
-echo "1. Display AKS clusters"
+echo "1. Set a current AKS cluster"
 echo "2. Create a new AKS cluster"
 echo "3. Install the generic DIH umbrella on an existing AKS cluster"
 echo "4. Install the bbw use-case-1 umbrella on an existing AKS cluster"
@@ -19,7 +19,7 @@ echo
 read -p ">> " choice
 
 case "$choice" in
-    1) $script_dir/get-aks-list.sh   
+    1) $script_dir/set-current-cluster.sh   
         ;;
     
     2) $script_dir/create-aks-cluster.sh        

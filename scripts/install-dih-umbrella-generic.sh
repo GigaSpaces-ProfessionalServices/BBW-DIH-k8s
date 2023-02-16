@@ -4,6 +4,7 @@ SCRIPTPATH=$(dirname "$SCRIPT")
 cd $SCRIPTPATH
 ###############################
 dih_version=16.3.0-m5
+helm_chart="dih/di-pipeline"
 work_dir=~/BBW-DIH-k8s
 script_dir=$work_dir/scripts
 helm_dir=$work_dir/helm
@@ -34,9 +35,7 @@ helm repo add gigaspaces-repo-ea $dih_gs_ea
 helm repo update
 
 ### Install the gs-dih umbrella
-helm install bbw-dih dih/di-pipeline --version $dih_version -f $helm_dir/gigaspaces.yaml
-#kubectl config set-context --current --namespace=$namespace
-
+helm install bbw-dih $helm_chart --version $dih_version -f $helm_dir/gigaspaces.yaml
 
 ### Install k8s dashboard
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
@@ -45,7 +44,7 @@ kubectl apply -f $helm_dir/clusterRoleBinding.yaml
 kubectl apply -f $helm_dir/ingress-rule-dashbord.yaml
 
 ### Install ingress nginx
-helm install ingress-nginx ingress-nginx/ingress-nginx -f $helm_dir/ingress-values.yaml
+helm install ingress-nginx ingress-nginx/ingress-nginx #-f $helm_dir/ingress-values.yaml
 echo "Waiting for ingress Public IP ..."
 sleep 5
 

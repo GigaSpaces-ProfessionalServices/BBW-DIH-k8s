@@ -33,11 +33,12 @@ git pull origin main
 cd ..
 
 ### Deploy BBW space
-clusteringress=$(kubectl get svc ingress-nginx-controller |awk '{print $4}'|tail -1)
-until $(curl --output /dev/null --silent --head --fail http://${clusteringress}:8090); do
-    printf '.'
-    sleep 2
-done
+echo "Waiting for the managers being available..."
+# clusteringress=$(kubectl get svc ingress-nginx-controller |awk '{print $4}'|tail -1)
+# until $(curl --output /dev/null --silent --head --fail http://${clusteringress}:8090); do
+#     printf '.'
+#     sleep 2
+# done
 helm install bbw-dih-space gigaspaces-repo-ea/xap-pu --version $dih_version #-f $helm_dir/bbw-dih-space.yaml
 
 ### Deploy BBW-kafka-producer

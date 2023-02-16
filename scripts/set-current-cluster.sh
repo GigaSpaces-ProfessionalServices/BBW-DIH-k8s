@@ -17,7 +17,22 @@ echo
 
 echo "Fetching clusters ..."
 az aks list -o table
-echo
-read -p "Enter any key to back to the menu..." key
-echo
-$work_dir/menu.sh
+echo 
+echo  "To set the cluster as the current cluster, enter its name: (or enter E to exit)"
+read -p ">> " clustername 
+
+case "$clustername" in
+
+    [eE])  $work_dir/menu.sh
+           ;;
+
+       *)  az account set --subscription $ARM_SUBSCRIPTION_ID
+           az aks get-credentials --resource-group $resource_group_name --name $clustername --overwrite-existing
+           echo
+           echo "The cluster [ $clustername ] has been set as current cluster."
+           echo
+           read -p "Enter any key to back to the menu..." key
+           $work_dir/menu.sh
+           ;;
+esac
+
