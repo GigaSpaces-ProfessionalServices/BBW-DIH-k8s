@@ -10,3 +10,6 @@ kubectl delete -f $helm_dir/clusterRoleBinding.yaml
 #kubectl delete -f $helm_dir/ingress-rule-dashbord.yaml
 helm uninstall bbw-dih
 helm uninstall ingress-nginx 
+kubectl delete pvc data-kafka-0
+kubectl delete pvc data-zookeeper-0
+kubectl delete pvc influxdb-data-influxdb-0
