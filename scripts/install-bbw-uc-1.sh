@@ -3,15 +3,16 @@ SCRIPT=$(realpath "$0")
 SCRIPTPATH=$(dirname "$SCRIPT")
 cd $SCRIPTPATH
 ###############################
-dih_version=16.3.0-m5
-work_dir=~/BBW-DIH-k8s
-script_dir=$work_dir/scripts
-helm_dir=$work_dir/helm
-kafka_producer_dir=$work_dir/BBW-Kafka-Producer
+# dih_version=16.3.0-m5
+# work_dir=~/BBW-DIH-k8s
+# script_dir=$work_dir/scripts
+# helm_dir=$work_dir/helm
+# kafka_producer_dir=$work_dir/BBW-Kafka-Producer
+source ./setEnv.sh
 
-dih_helm_repo=https://s3.amazonaws.com/resources.gigaspaces.com/helm-charts-dih
-dih_gs_ea=https://resources.gigaspaces.com/helm-charts-ea
-ingress_helm_repo=https://kubernetes.github.io/ingress-nginx
+# dih_helm_repo=https://s3.amazonaws.com/resources.gigaspaces.com/helm-charts-dih
+# dih_gs_ea=https://resources.gigaspaces.com/helm-charts-ea
+# ingress_helm_repo=https://kubernetes.github.io/ingress-nginx
 
 resource_group_name=csm-bbw
 ###############################
@@ -39,7 +40,7 @@ echo "Waiting for the managers being available..."
 #     printf '.'
 #     sleep 2
 # done
-helm install bbw-dih-space gigaspaces-repo-ea/xap-pu --version $dih_version #-f $helm_dir/bbw-dih-space.yaml
+helm install bbw-dih-space gigaspaces-repo-ea/xap-pu --version $dih_version -f $helm_dir/bbw-dih-space.yaml
 
 ### Deploy BBW-kafka-producer
 kubectl apply -f $kafka_producer_dir/configmap.yml

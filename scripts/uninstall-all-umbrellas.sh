@@ -16,3 +16,5 @@ kubectl config current-context
 
 $script_dir/uninstall-dih-umbrella-generic.sh
 $script_dir/uninstall-bbw-uc1.sh
+
+

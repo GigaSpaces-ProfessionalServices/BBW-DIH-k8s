@@ -7,6 +7,7 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-connect-timeout: "10000"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "10000"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "10000"
+    nginx.ingress.kubernetes.io/use-regex: "true"
     ingress.kubernetes.io/compress-enable: "true"
 spec:
   ingressClassName: nginx
@@ -19,10 +20,6 @@ spec:
             name: bbw-dih-spacedeck
             port:
               number: 3000
-        path: /spacedeck
+        path: /sd(/|$)(.*)
         pathType: ImplementationSpecific
-  defaultBackend:
-    service:
-       name: bbw-dih-spacedeck
-       port:
-         number: 3000
+  

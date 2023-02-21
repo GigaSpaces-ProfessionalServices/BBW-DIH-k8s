@@ -39,6 +39,6 @@ case "$choice" in
     [eE]) exit
         ;;
 
-    *) ./menu.sh
+    *) $work_dir/menu.sh
         ;;
 esac

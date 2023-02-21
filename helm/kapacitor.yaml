@@ -1,0 +1,2 @@
+name: influxdb-kapacitor
+influxURL: "http://influxdb:8086"

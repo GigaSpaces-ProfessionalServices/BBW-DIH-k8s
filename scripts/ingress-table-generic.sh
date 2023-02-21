@@ -15,5 +15,5 @@ echo "grafana:         http://${clusteringress}:3030"
 echo 
 echo "kafka-ui:        http://${clusteringress}:8080"
 echo
-echo "k8s dashboard:   https:/${clusteringress}"
+echo "k8s dashboard:   https:/${clusteringress}:9000"
 echo "============================================="

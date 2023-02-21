@@ -5,10 +5,11 @@ cd $SCRIPTPATH
 #######
 resource_group_name="csm-bbw"
 #######
-work_dir=~/BBW-DIH-k8s
-script_dir=$work_dir/scripts
-helm_dir=$work_dir/helm
-kafka_producer_dir=$work_dir/BBW-Kafka-Producer
+# work_dir=~/BBW-DIH-k8s
+# script_dir=$work_dir/scripts
+# helm_dir=$work_dir/helm
+# kafka_producer_dir=$work_dir/BBW-Kafka-Producer
+source ./setEnv.sh
 #######
 
 clear
