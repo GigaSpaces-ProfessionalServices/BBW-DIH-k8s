@@ -18,7 +18,10 @@ case "$response" in
         ;;
     *)
         echo "Aborted."
-        exit
+        echo
+        read -p "Enter any key to back to the menu..." key
+        echo
+        $work_dir/menu.sh
         ;;
 esac
 

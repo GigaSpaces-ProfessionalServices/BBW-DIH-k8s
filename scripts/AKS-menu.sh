@@ -10,8 +10,10 @@ echo "AKS management"
 echo "--------------"
 echo
 echo "1. Set a current AKS cluster (update kubeconfig)"
-echo "2. Create a new AKS cluster"
-echo "-----------------------------------------------------------------"
+echo "2. Create a new AKS cluster (using Terraform)"
+echo "---------------------------------------------------------"
+echo "3. Destroy AKS Cluster (based on the Terraform namespace)"
+echo "---------------------------------------------------------"
 echo "B. Back to Main menu."
 echo "E. Exit"
 echo 
@@ -22,6 +24,9 @@ case "$choice" in
         ;;
     
     2) $scripts_dir/create-aks-cluster.sh        
+        ;;
+
+    3) $scripts_dir/destroy-aks-cluster.sh
         ;;
 
     [Bb]) $work_dir/menu.sh
