@@ -6,7 +6,7 @@ export dih_helm_repo=https://s3.amazonaws.com/resources.gigaspaces.com/helm-char
 export dih_gs_ea=https://resources.gigaspaces.com/helm-charts-ea
 export ingress_helm_repo=https://kubernetes.github.io/ingress-nginx
 export influxdb_kapacitor_helm=https://helm.influxdata.com
-export datadog_helm=https://helm.datadoghq.com
+export datadog_hel=https://helm.datadoghq.com
 
 ### Azure 
 export resource_group_name=csm-bbw
@@ -24,4 +24,4 @@ export dih_version=16.3.0-m5
 
 
 ### datadog integration bbw-demo
-export datadog_api_key=""
+export datadog_api_key="6b06a3864ceb15999b3d7c330789ba0e"
