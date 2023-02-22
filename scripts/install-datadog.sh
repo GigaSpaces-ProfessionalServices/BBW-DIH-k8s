@@ -10,7 +10,7 @@ helm repo add datadog $datadog_helm
 helm repo update datadog
 
 ### Create k8s secret for bbw-demo datadog account
-kubectl create generic secret datadog-secret --from-literal $datadog_api_key
+kubectl create secret generic datadog-secret --from-literal $datadog_api_key
 
 ### Install datadog agent
 helm install bbw-datadog-agent datadog/datadog -f $helm_dir/datadog.yaml
