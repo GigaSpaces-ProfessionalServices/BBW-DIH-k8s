@@ -59,7 +59,7 @@ You can destroy the AKS cluster from azure portal or using Terraform:
 ./destroy-aks-cluster.sh
 ```
 
-# Appendix: ingress-tcp ports
+# Appendix 1: ingress-tcp ports
 
   |ingress port|namespace|serviceName|servicePort|
   |----|-------|-------------------|-----|
@@ -72,3 +72,23 @@ You can destroy the AKS cluster from azure portal or using Terraform:
   |9000|kubernetes-dashboard|kubernetes-dashboard|443|
   |9092|default|influxdb-kapacitor-kapacitor|9092|
   |8086|default|influxdb|8086|
+
+
+# Appendix 2: setEnv.sh
+
+The scripts in this project requires credentials for azure and datadog.
+Please update the BBW-DIH-k8s/scripts/setEnv.sh with your environment details:
+
+```
+### Azure 
+export resource_group_name=""
+export ARM_CLIENT_ID=""
+export ARM_CLIENT_SECRET=""
+export ARM_SUBSCRIPTION_ID=""
+export ARM_TENANT_ID=""
+```
+```
+### datadog integration bbw-demo
+export datadog_api_key=""
+export datadog_app_key=""
+```
