@@ -16,4 +16,6 @@ echo
 echo "kafka-ui:        http://${clusteringress}:8080"
 echo
 echo "k8s dashboard:   https:/${clusteringress}:9000"
+echo 
+echo "Kapaictor Rest:  http:/${clusteringress}:9092"
 echo "============================================="

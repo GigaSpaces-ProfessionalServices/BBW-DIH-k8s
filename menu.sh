@@ -13,7 +13,8 @@ echo "1. Set a current AKS cluster"
 echo "2. Create a new AKS cluster"
 echo "3. Install the generic DIH umbrella on an existing AKS cluster"
 echo "4. Install the bbw use-case-1 umbrella on an existing AKS cluster"
-echo "5. Uninstall Menu"
+echo "5. Install datadog agent"
+echo "6. Uninstall Menu"
 echo "E. Exit"
 echo 
 read -p ">> " choice
@@ -33,7 +34,11 @@ case "$choice" in
         $script_dir/install-bbw-uc-1.sh
         ;;
     
-    5) $script_dir/uninstall-menu.sh
+    5) $script_dir/install-datadog.sh
+        ;;
+
+    6) $script_dir/uninstall-menu.sh
+    
         ;;
 
     [eE]) exit

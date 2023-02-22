@@ -1,0 +1,8 @@
+datadog:
+  apiKey: 6b06a3864ceb15999b3d7c330789ba0e
+  appKey: 6b06a3864ceb15999b3d7c330789ba0e
+  kubelet:
+    tlsVerify: false 
+clusterAgent:
+  replicas: 2
+  createPodDisruptionBudget: true

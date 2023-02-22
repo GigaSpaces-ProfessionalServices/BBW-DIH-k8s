@@ -50,5 +50,8 @@ terraform plan -out ${clustername}.out
 terraform apply ${clustername}.out
 rm ${clustername}.out
 
+echo
+read -p "Enter any key to back to the menu..." key
+echo
 $work_dir/menu.sh
 

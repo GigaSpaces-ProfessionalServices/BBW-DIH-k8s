@@ -13,6 +13,7 @@ echo "1. Uninstall the generic DIH umbrella"
 echo "2. Uninstall the bbw use-case-1 umbrella"
 echo "3. Uninstall all (will remove everything from the AKS)"
 echo "4. Destroy AKS Cluster"
+echo "5. Uninstall datadog agent"
 echo "E. Exit"
 echo 
 read -p ">> " choice
@@ -40,6 +41,13 @@ $work_dir/menu.sh
         ;;
     
     4) $script_dir/destroy-aks-cluster.sh
+        echo
+        read -p "Enter any key to back to the menu..." key
+        echo
+        $work_dir/menu.sh
+        ;;
+    
+    5) $script_dir/uninstall-datadog.sh
         echo
         read -p "Enter any key to back to the menu..." key
         echo

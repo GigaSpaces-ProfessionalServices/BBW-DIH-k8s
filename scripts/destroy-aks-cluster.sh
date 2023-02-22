@@ -33,3 +33,8 @@ terraform workspace select default
 terraform workspace workspace delete $clustername
 rm destroy-$clustername.out
 mv $work_dir/Terraform/terraform.tfstate.d/$clustername ../old_states
+
+echo
+read -p "Enter any key to back to the menu..." key
+echo
+$work_dir/menu.sh
