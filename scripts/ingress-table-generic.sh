@@ -18,4 +18,6 @@ echo
 echo "k8s dashboard:   https:/${clusteringress}:9000"
 echo 
 echo "Kapaictor Rest:  http:/${clusteringress}:9092"
+echo 
+echo "Influxdb Rest    http:/${clusteringress}:8086"
 echo "============================================="
