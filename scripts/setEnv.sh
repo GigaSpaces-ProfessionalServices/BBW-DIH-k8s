@@ -24,4 +24,4 @@ export dih_version=16.3.0-m5
 
 
 ### datadog integration bbw-demo
-export datadog_api_key="6b06a3864ceb15999b3d7c330789ba0e"
+export datadog_api_key=""
