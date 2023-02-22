@@ -4,17 +4,7 @@ SCRIPTPATH=$(dirname "$SCRIPT")
 cd $SCRIPTPATH
 source ./setEnv.sh
 
-resource_group_name=csm-bbw
 ###############################
-echo "Fetching clusters ..."
-az aks list -o table
-echo
-read -p "Please provide a Cluster Name: " clustername
-#config kubectl
-az account set --subscription $ARM_SUBSCRIPTION_ID
-az aks get-credentials --resource-group $resource_group_name --name $clustername --overwrite-existing
-echo
-kubectl config current-context
 echo 
 echo "Installing BBW-DIH umbrella on k8s cluster"
 ### Add helm repositories
@@ -23,7 +13,7 @@ helm repo add ingress-nginx      $ingress_helm_repo
 helm repo add gigaspaces-repo-ea $dih_gs_ea
 helm repo add kafka              $kafka
 helm repo add kafka-ui           $kafka_ui
-help repo add influxdb-kapacitor $influxdb_kapacitor_helm
+helm repo add influxdb-kapacitor $influxdb_kapacitor_helm
 
 ### Upadte helm repo
 helm repo update
@@ -40,7 +30,7 @@ kubectl apply -f $helm_dir/dashboard-adminuser.yaml
 kubectl apply -f $helm_dir/clusterRoleBinding.yaml
 
 ### Install influxdb Kapacitor
-helm install influxdb-kapacitor influxdata/kapacitor -f helm/kapacitor.yaml
+helm install influxdb-kapacitor influxdata/kapacitor -f $helm_dir/kapacitor.yaml
 
 ### Install Kafka
 helm install kafka kafka/kafka
@@ -50,10 +40,10 @@ kubectl apply -f $helm_dir/kafka-ui-deployment.yaml
 kubectl apply -f $helm_dir/kafka-ui-svc.yaml
 
 ### Print ingress IP/Ports
-$script_dir/ingress-table-generic.sh
+$scripts_dir/ingress-table-generic.sh
 
 ### Create k8s token for dashboard
-$script_dir/generate-k8s-token.sh
+$scripts_dir/generate-k8s-token.sh
 
 echo
 read -p "Enter any key to back to the menu..." key

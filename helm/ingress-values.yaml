@@ -7,3 +7,4 @@ tcp:
   6085: "default/bbw-dih-pc-pluggable-connector:6085"
   9000: "kubernetes-dashboard/kubernetes-dashboard:443"
   9092: "default/influxdb-kapacitor-kapacitor:9092"
+  8086: "default/influxdb:8086"

@@ -1,8 +1,7 @@
 #!/bin/bash
-# work_dir=~/BBW-DIH-k8s
-# script_dir=$work_dir/scripts
-# helm_dir=$work_dir/helm
-# kafka_producer_dir=$work_dir/BBW-Kafka-Producer
+SCRIPT=$(realpath "$0")
+SCRIPTPATH=$(dirname "$SCRIPT")
+cd $SCRIPTPATH
 source ./setEnv.sh
 
 kubectl delete -f $kafka_producer_dir/configmap.yml

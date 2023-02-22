@@ -59,3 +59,16 @@ You can destroy the AKS cluster from azure portal or using Terraform:
 ./destroy-aks-cluster.sh
 ```
 
+# Appendix: ingress-tcp ports
+
+  |ingress port|namespace|serviceName|servicePort|
+  |----|-------|-------------------|-----|
+  |8090|default|xap-manager-service|8090|
+  |3030|default|grafana|3000|
+  |3000|default|bbw-dih-spacedeck|3000|
+  |8080|default|kafka-ui|8080|
+  |8081|default|bbw-kafka-producer-svc|8081|
+  |6085|default|bbw-dih-pc-pluggable-connector|6085|
+  |9000|kubernetes-dashboard|kubernetes-dashboard|443|
+  |9092|default|influxdb-kapacitor-kapacitor|9092|
+  |8086|default|influxdb|8086|

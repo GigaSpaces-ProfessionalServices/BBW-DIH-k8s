@@ -1,46 +1,30 @@
 #!/bin/bash
-# work_dir=~/BBW-DIH-k8s
-# script_dir=$work_dir/scripts
-# helm_dir=$work_dir/helm
-# kafka_producer_dir=$work_dir/BBW-Kafka-Producer
-# #########
+SCRIPT=$(realpath "$0")
+SCRIPTPATH=$(dirname "$SCRIPT")
+cd $SCRIPTPATH
+#######
+source scripts/setEnv.sh
+#######
+
 source scripts/setEnv.sh
 clear
 echo "Welcome to DIH Builder on Azure!"
 echo "--------------------------------"
 echo
-echo "1. Set a current AKS cluster"
-echo "2. Create a new AKS cluster"
-echo "3. Install the generic DIH umbrella on an existing AKS cluster"
-echo "4. Install the bbw use-case-1 umbrella on an existing AKS cluster"
-echo "5. Install datadog agent"
-echo "6. Uninstall Menu"
+echo "1. AKS Management"
+echo "2. DIH Management"
 echo "E. Exit"
 echo 
 read -p ">> " choice
 
 case "$choice" in
-    1) $script_dir/set-current-cluster.sh   
+ 
+    1)  $scripts_dir/AKS-menu.sh
         ;;
     
-    2) $script_dir/create-aks-cluster.sh        
+    2)  $scripts_dir/dih-menu.sh
         ;;
-
-    3)  echo "Install the generic DIH umbrella on an existing AKS cluster"
-        $script_dir/install-dih-umbrella-generic.sh
-        ;;
-    
-    4)  echo "Install the bbw use-case-1 umbrella on an existing AKS cluster"
-        $script_dir/install-bbw-uc-1.sh
-        ;;
-    
-    5) $script_dir/install-datadog.sh
-        ;;
-
-    6) $script_dir/uninstall-menu.sh
-    
-        ;;
-
+        
     [eE]) exit
         ;;
 

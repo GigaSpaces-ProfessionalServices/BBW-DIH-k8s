@@ -2,11 +2,6 @@
 SCRIPT=$(realpath "$0")
 SCRIPTPATH=$(dirname "$SCRIPT")
 cd $SCRIPTPATH
-###########
-# work_dir=~/BBW-DIH-k8s
-# script_dir=$work_dir/scripts
-# helm_dir=$work_dir/helm
-# kafka_producer_dir=$work_dir/BBW-Kafka-Producer
 source ./setEnv.sh
 ###########
 
@@ -15,7 +10,7 @@ helm repo add datadog $datadog_helm
 helm repo update datadog
 
 ### Create k8s secret for bbw-demo datadog account
-kubectl create secret datadog-secret --from-literal $datadog_api_key
+kubectl create generic secret datadog-secret --from-literal $datadog_api_key
 
 ### Install datadog agent
 helm install bbw-datadog-agent datadog/datadog -f $helm_dir/datadog.yaml

@@ -5,15 +5,6 @@ cd $SCRIPTPATH
 ###############################
 source ./setEnv.sh
 ###############################
-echo "Fetching clusters ..."
-az aks list -o table
-echo
-read -p "Please provide a Cluster Name: " clustername
-#config kubectl
-az account set --subscription $ARM_SUBSCRIPTION_ID
-az aks get-credentials --resource-group $resource_group_name --name $clustername --overwrite-existing
-echo
-kubectl config current-context
 
 cd $work_dir
 echo "Clonning BBW-Kafka-Producer git project ..."
@@ -39,7 +30,7 @@ kubectl apply -f $kafka_producer_dir/deployment.yaml
 ### Deploy BBW Pluggable connector
 helm install bbw-dih-pc $kafka_producer_dir/helm-chart/pluggable-connector
 
-$script_dir/ingress-table-uc-1.sh
+$scripts_dir/ingress-table-uc-1.sh
 echo
 read -p "Enter any key to back to the menu..." key
 echo
