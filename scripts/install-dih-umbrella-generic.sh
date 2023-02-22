@@ -39,6 +39,9 @@ helm install kafka kafka/kafka
 kubectl apply -f $helm_dir/kafka-ui-deployment.yaml
 kubectl apply -f $helm_dir/kafka-ui-svc.yaml
 
+### Install influxdb Kapacitor
+helm install influxdb-kapacitor influxdb-kapacitor/kapacitor -f $helm_dir/kapacitor.yaml
+
 ### Print ingress IP/Ports
 $scripts_dir/ingress-table-generic.sh
 

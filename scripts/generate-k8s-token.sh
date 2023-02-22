@@ -10,7 +10,7 @@ echo "Use this token to login k8s dashboard:"
 echo "======================================"
 echo
 clustername=$(kubectl config current-context)
-kubectl -n kubernetes-dashboard create token admin-user --duration=0s |tee $work_dir/k8s-dashboard-token-$clustername.txt
+kubectl -n kubernetes-dashboard create token admin-user --duration=720h |tee $work_dir/k8s-dashboard-token-$clustername.txt
 echo |tee -a $work_dir/k8s-dashboard-token-$clustername.txt
 echo
 echo
