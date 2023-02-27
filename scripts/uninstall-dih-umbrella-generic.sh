@@ -14,3 +14,4 @@ helm uninstall influxdb-kapacitor
 kubectl delete -f $helm_dir/kafka-ui-deployment.yaml
 kubectl delete -f $helm_dir/kafka-ui-svc.yaml
 kubectl delete pvc data-kafka-0
+kubectl delete pvc data-kafka-zookeeper-0
