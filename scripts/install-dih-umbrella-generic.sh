@@ -22,7 +22,7 @@ helm repo update
 helm install ingress-nginx ingress-nginx/ingress-nginx -f $helm_dir/ingress-values.yaml
 
 ### Install the gs-dih umbrella
-helm install bbw-dih gigaspaces-repo-ea/xap --version $dih_version -f $helm_dir/gigaspaces.yaml
+helm install bbw-dih gigaspaces-repo-ea/xap --version $dih_version -f $helm_dir/bbw-dih-managers.yaml
 
 ### Install k8s dashboard
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml

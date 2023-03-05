@@ -20,7 +20,14 @@ echo "Waiting for the managers being available..."
 #     printf '.'
 #     sleep 2
 # done
-helm install bbw-dih-space gigaspaces-repo-ea/xap-pu --version $dih_version -f $helm_dir/bbw-dih-space.yaml
+helm install bbw-dih-space gigaspaces-repo-ea/xap-pu --version $dih_version -f $helm_dir/bbw-dih-space.yaml 
+
+### Deploy the space with Mirror support
+# helm install bbw-dih-space gigaspaces-repo-ea/xap-pu --version 16.3.0-m5 --set resourceUrl="https://aa-nihar-test.s3.us-east-2.amazonaws.com/bbw-dih/bbw-dih-space-0.1.jar",partitions=2,ha=true
+
+
+### Deploy mirror pu (bbw-dih-mirror) 
+#helm install bbw-dih-mirror gigaspaces-repo-ea/xap-pu --version 16.3.0-m5 --set resourceUrl="https://aa-nihar-test.s3.us-east-2.amazonaws.com/bbw-dih/bbw-dih-mirror-0.1.jar",instances=1,partitions=0
 
 ### Deploy BBW-kafka-producer
 kubectl apply -f $kafka_producer_dir/configmap.yml
