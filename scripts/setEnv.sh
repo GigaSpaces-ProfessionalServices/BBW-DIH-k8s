@@ -2,7 +2,6 @@
 # Helm repositories
 export kafka=https://charts.bitnami.com/bitnami
 export kafka_ui=https://charts.redpanda.com/
-export dih_helm_repo=https://s3.amazonaws.com/resources.gigaspaces.com/helm-charts-dih
 export dih_gs_ea=https://resources.gigaspaces.com/helm-charts-ea
 export ingress_helm_repo=https://kubernetes.github.io/ingress-nginx
 export influxdb_kapacitor_helm=https://helm.influxdata.com

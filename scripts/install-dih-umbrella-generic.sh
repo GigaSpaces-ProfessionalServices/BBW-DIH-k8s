@@ -8,7 +8,6 @@ source ./setEnv.sh
 echo 
 echo "Installing BBW-DIH umbrella on k8s cluster"
 ### Add helm repositories
-helm repo add dih                $dih_helm_repo
 helm repo add ingress-nginx      $ingress_helm_repo
 helm repo add gigaspaces-repo-ea $dih_gs_ea
 helm repo add kafka              $kafka
