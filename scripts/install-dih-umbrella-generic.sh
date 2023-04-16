@@ -28,8 +28,6 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/a
 kubectl apply -f $helm_dir/dashboard-adminuser.yaml
 kubectl apply -f $helm_dir/clusterRoleBinding.yaml
 
-### Install influxdb Kapacitor
-helm install influxdb-kapacitor influxdata/kapacitor -f $helm_dir/kapacitor.yaml
 
 ### Install Kafka
 helm install kafka kafka/kafka
