@@ -1,3 +1,0 @@
-#!/bin/bash
-sudo yum install -y git
-su - centos -c "git clone https://github.com/GigaSpaces-ProfessionalServices/BBW-DIH-k8s.git && /home/centos/BBW-DIH-k8s/Jumper/createJumper/install_jumper_tools.sh"
