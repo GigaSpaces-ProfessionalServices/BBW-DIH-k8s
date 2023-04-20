@@ -9,4 +9,4 @@ image="OpenLogic:CentOS:7_9:latest"
 userdata="./azure-jumper-userdata.txt"
 
 echo "Starting Jumper VM provisioning..."
-az vm create -n bbw-jumper-$vmname -g csm-bbw --image $image --custom-data $userdata --ssh-key-value $sshpubkey --public-ip-sku Standard --nic-delete-option delete --admin-username centos --tags Owner=$owner Project=$project $default_tags --vnet-name csm-bbw-vnet --subnet jumper
+az vm create -n gng-jumper -g csm-bbw --image $image --custom-data $userdata --ssh-key-value $sshpubkey --public-ip-sku Standard --nic-delete-option delete --admin-username centos --tags Owner=$owner Project=$project $default_tags --vnet-name csm-bbw-vnet --subnet jumper --subnet default
