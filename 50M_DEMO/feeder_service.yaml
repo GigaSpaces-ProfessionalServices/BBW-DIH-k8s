@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: oracle-feeder-service
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8015
+      protocol: TCP
+      targetPort: 8015
+  selector:
+    selectorId: oracle-feeder-xap-pu
