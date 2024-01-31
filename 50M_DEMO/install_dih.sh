@@ -11,8 +11,10 @@ helm upgrade --install dih dihrepo/dih --version 16.4.0 --devel \
 --set tags.iidr=false \
 --set manager.license="Product=InsightEdge;Version=16.4;Type=ENTERPRISE;Customer=Gigaspaces_R&D_DI_DEV;Expiration=2025-Dec-31;Hash=QROtPGzkRIRPMV84YXOU" \
 --set operator.license="Product=InsightEdge;Version=16.4;Type=ENTERPRISE;Customer=Gigaspaces_R&D_DI_DEV;Expiration=2025-Dec-31;Hash=QROtPGzkRIRPMV84YXOU" \
---set manager.ha=false \
+--set manager.ha=true \
 --set global.security.enabled=false \
 --set global.password=Shmulik1! \
---set global.s3.enabled=false \
+--set global.s3.enabled=false 
+
+kubectl apply -f ./feeder_service.yaml
 
