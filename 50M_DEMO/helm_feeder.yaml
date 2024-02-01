@@ -2,3 +2,6 @@ partitions: 0
 instances: 1
 manager.name: xap-manager-service
 resourceUrl: "https://bbw.s3.eu-central-1.amazonaws.com/OracleFeeder-1.5-SNAPSHOT.jar"
+propertiesFrom:
+  - configMapRef:
+      name: oracle-feeder-cm 

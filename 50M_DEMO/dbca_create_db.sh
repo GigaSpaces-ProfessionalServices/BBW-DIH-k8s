@@ -1,9 +1,11 @@
-CDB_NAME=cdb1
-PDB_NAME=pdb1
-PASS=Shmulik1!
+#!/bin/bash
+
+export CDB_NAME=cdb1
+export PDB_NAME=pdb1
+export PASS=Shmulik1!
 dbca -silent -createDatabase \
  -templateName General_Purpose.dbc \
- -gdbname $CDB_NAME -sid CDB_NAME -responseFile NO_VALUE \
+ -gdbname $CDB_NAME -sid $CDB_NAME -responseFile NO_VALUE \
  -characterSet AL32UTF8 \
  -sysPassword $PASS \
  -systemPassword $PASS \
@@ -13,9 +15,9 @@ dbca -silent -createDatabase \
  -pdbAdminPassword $PASS \
  -databaseType MULTIPURPOSE \
  -memoryMgmtType auto_sga \
- -totalMemory 1536 \
+ -totalMemory 8192 \
  -storageType FS \
- -datafileDestination "/u01/app/oracle/oradata" \
+ -datafileDestination "$ORACLE_HOME/oradata" \
  -redoLogFileSize 50 \
  -emConfiguration NONE \
  -ignorePreReqs

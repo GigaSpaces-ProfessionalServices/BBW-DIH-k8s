@@ -1,0 +1,21 @@
+space:
+  name: bbw-space
+  secured: false
+rest:
+  port: 8015
+  locators: xap-manager-service
+  group: xap-16.4.0
+  secured: false
+oracle:
+  host: 10.222.0.152
+  port: 1521
+  database: pdb1
+  user: bbw
+  password: Shmulik1!
+feeder:
+  # how many SpaceDocuments to accumulate for writeMultiple operation
+  writeBatchSize: 2000
+  # this allows garbage collection
+  sleepAfterWriteInMillis: 5
+  # how often to print progress to the log
+  progressPrintIntervalInSec: 10
