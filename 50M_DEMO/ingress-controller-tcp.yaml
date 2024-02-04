@@ -22,4 +22,4 @@ tcp:
 controller:
   service:
     annotations:
-      service.beta.kubernetes.io/azure-load-balancer-internal: false
+      service.beta.kubernetes.io/azure-load-balancer-internal: true

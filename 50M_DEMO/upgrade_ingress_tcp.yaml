@@ -1,1 +1,3 @@
-helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx -f ./ingress-controller-tcp.yaml
+#!/bin/bash
+source ./demoEnv.sh
+helm upgrade --install ${INGRESS_CNTRL_HELM_CHART_NAME} ${INGRESS_CNTRL_HELM_REPO_NAME}/${INGRESS_CNTRL_HELM_CHART_NAME} -f ./ingress-controller-tcp.yaml
