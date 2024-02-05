@@ -1,0 +1,32 @@
+{{- if not .Values.webhook.ca }}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ .Release.Name }}-cert-manager-webhook
+  namespace: {{ .Release.Namespace }}
+spec:
+  secretName: {{ .Release.Name }}-certificate
+
+  duration: 2160h # 90d
+  renewBefore: 360h # 15d
+  subject:
+    organizations:
+      - gigaspaces
+  # The use of the common name field has been deprecated since 2000 and is
+  # discouraged from being used.
+  commonName: webhook-server.{{ .Release.Namespace }}.svc
+  isCA: false
+  privateKey:
+    algorithm: RSA
+    encoding: PKCS1
+    size: 2048
+  usages:
+    - server auth
+    - client auth
+
+  dnsNames:
+    - webhook-server
+    - webhook-server.{{ .Release.Namespace }}.svc
+  issuerRef:
+    name: selfsigned
+  {{- end }}

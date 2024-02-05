@@ -1,0 +1,267 @@
+global:
+  flink:
+    highAvailability:
+      #uses S3 bucket for saving checkpoints+savepoints
+      enabled: true
+      #bucket name to use
+      bucket:
+      #dir name override to create when using the bucket, here it will save its data
+      parentDirOverride:
+  #S3 opensource implementation
+  minio:
+    tenantName: minio-tenant
+    #enabling will run minio charts in the cluster to self manage an S3 service
+    enabled: false
+  s3:
+    enabled: false
+    #registers a default sor through di-manager upon cluster installation, by setting "bucket" and enabling s3 globally
+    defaultS3Bucket:
+      bucket:
+      sorName: DEMO_BUCKET
+  #responsible for affinity between di-mdm and di-operator if enabled
+  affinity:
+    enabled: true
+  #image pull secrets to use
+  imagePullSecrets:
+    - myregistrysecret
+  #will set the MDM_SERVER_URL env for relevant services to look for mdm
+  mdmServerUrl: http://di-mdm:6081
+  #tells mdm, subscription-manager and iidr-kafka where is the kafka bootstrapservers
+  kafkaHost: kafka
+  #tells mdm, subscription-manager and iidr-kafka where is the kafka bootstrapservers
+  kafkaPort: "9092"
+  #tells mdm where is zk
+  zookeeperHost: zookeeper
+  #tells mdm where is zk
+  zookeeperPort: "2181"
+  #tells mdm where is flink
+  flinkUrl: http://flink-jobmanager:8081
+  #tells subscription manager where is iidrAs
+  iidrAsHost: iidr-as
+  #tells subscription manager where is iidrAs
+  iidrAsPort: "10101"
+  #tells subscription manager where is iidrKafka
+  iidrKafkaHost: iidr-kafka
+  #tells subscription manager where is iidrKafka
+  iidrKafkaPort: "11701"
+  #tells subscription manager where is iidrKafka
+  iidrKafkaPropertiesManagerHost: http://iidr-kafka
+  #tells subscription manager where is iidrKafka
+  iidrKafkaPropertiesManagerPort: 6085
+  #spacedeck installation mode: dih or smart-cache
+  installation: dih
+  #sets cluster security
+  security:
+    enabled: true
+    # global (admin) password is expected to be given in installation
+    password:
+  #sets xap properties for the cluster to use it
+  xap:
+    lookupGroups: 16.4.0
+    lookupLocators: xap-manager-service
+    security:
+      service:
+        name: xap-security
+        port: 9000
+  #sets ingress host
+  ingressHost:
+
+#set cluster metrics for space and flink, brings grafana and influxdb services
+metrics:
+  enabled: true
+
+#configs xap-operator
+operator:
+  enabled: true
+  delay: true
+
+#configs xap-manager
+manager:
+  enabled: true
+  metrics:
+    enabled: true
+  service:
+    type: ClusterIP
+  ha: true
+  securityService:
+    enabled: false
+  #xap-manager anti affinity
+  antiAffinity:
+    enabled: true
+
+spacedeck:
+  enabled: true
+
+grafana:
+  enabled: true
+  fullnameOverride: "grafana"
+  service:
+    port: 3000
+    targetPort: 3000
+  datasources:
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+        - name: Prometheus
+          type: prometheus
+          url: http://prometheus-operated:9090/
+  rbac:
+    create: true
+    pspEnabled: false
+    namespaced: true
+  adminUser: admin
+  adminPassword: admin
+  sidecar:
+    dashboards:
+      enabled: true
+
+influxdb:
+  image:
+    tag: 1.8.10
+    pullSecrets:
+      - myregistrysecret
+  service:
+    port: 8086
+    targetPort: 8086
+  env:
+    - name: INFLUXDB_DB
+      value: mydb
+  persistence:
+    enabled: true
+    size: 8Gi
+
+#creates iidr subscription manager
+diSubscriptionManagerIidr:
+  connectorType: iidr
+
+#creates s3 subscription manager
+diSubscriptionManagerS3:
+  connectorType: s3
+
+#brings relevant iidr services: iidr subscription manager, iidrAs, iidrKafka
+tags:
+  iidr: false
+
+#deploys di umbrella
+di:
+  enabled: true
+  diMdm:
+    image:
+      repository: gigaspaces/di-mdm
+      pullPolicy: IfNotPresent
+    affinity:
+      enabled: true
+      value: di
+    #runs mdm /home/gsods/global_config.sh script for setting mdm global config as a post start hook
+    doGlobalConfig: true
+    #mdm like all di services is stateless, he persist its data on zookeeper
+    repositoryProfile: zookeeper
+  diManager:
+    image:
+      repository: gigaspaces/di-manager
+      pullPolicy: IfNotPresent
+  #di operator is meant for debugging purposes from inside of the cluster
+  diOperator:
+    enabled: false
+    image:
+      repository: gigaspaces/di-centos8
+      tag: "1.1"
+      pullPolicy: IfNotPresent
+    mountVolume: di
+    affinity:
+      enabled: true
+      value: di
+
+flink:
+  enabled: true
+  rootLoggerLevel: INFO
+  env:
+    builtInPlugins: flink-s3-fs-hadoop #loads selected flink built in plugins, currently supports only single plugin (helm template needs to be changed)
+  jobmanager:
+    address: flink-jobmanager
+    memoryRequestSize: 2.2G
+    memoryProcessSize: 2000m #jobmanager.memory.process.size : Total Process Memory size for the JobManager
+    jvmMetaspaceSize: 500m
+  taskmanager:
+    numberOfTaskSlots: 2 #taskmanager.numberOfTaskSlots : min 1 max 10 . The number of jobs per taskmanager
+    memoryRequestSize: 2.2G
+    memoryProcessSize: 2000m #taskmanager.memory.process.size : Total Process Memory size for the TaskExecutors
+    jvmMetaspaceSize: 500m
+  metrics:
+    enabled: true
+    db: mydb
+    host: influxdb
+    port: 8086
+  state:
+    backend:
+      type: filesystem
+      incremental: false
+
+kafka:
+  enabled: true
+  fullnameOverride: kafka
+  replicaCount: 3
+  containerPorts:
+    client: 9092
+  service:
+    type: ClusterIP
+    ports:
+      client: 9092
+  persistence:
+    enabled: true
+    size: 8Gi
+  zookeeper:
+    enabled: true
+    fullnameOverride: zookeeper
+    replicaCount: 3
+    containerPorts:
+      client: 2181
+    service:
+      type: ClusterIP
+      ports:
+        client: 2181
+    persistence:
+      enabled: true
+      size: 8Gi
+
+#kafka ui
+redpanda:
+  enabled: true
+  fullnameOverride: redpanda
+
+prometheus:
+  enabled: false
+  grafana:
+    enabled: false
+    forceDeployDashboards: true
+    forceDeployDatasources: true
+    sidecar:
+      datasources:
+        enabled: true
+    adminUser: admin
+    adminPassword: admin
+
+xap-dgw:
+  enabled: true
+  nodeSelector:
+    enabled: true
+
+service-operator:
+  enabled: true
+
+service-creator:
+  enabled: true
+
+minio-operator: { }
+
+minio:
+  image:
+    repository: minio/minio
+    tag: RELEASE.2023-06-23T20-26-00Z
+  #hook that is responsible accessing minio operator and create minio tenant from inside the cluster
+  postStartHookImage:
+    repository: gigaspaces/di-flink-minio-start-hook
+    tag: 1.0.0
+    capacity: 10Gi
+    servers: 1
+    volumes: 1

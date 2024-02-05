@@ -1,0 +1,73 @@
+global:
+  affinity:
+    enabled: true
+  imagePullSecrets:
+    - myregistrysecret
+  mdmServerUrl: http://di-mdm:6081
+  kafkaHost: kafka
+  kafkaPort: "9092"
+  zookeeperHost: zookeeper
+  zookeeperPort: "2181"
+  flinkUrl: http://flink-jobmanager:8081
+  diProcessorJar: /di-jars/job.jar
+  s3:
+    enabled: false
+    defaultS3Bucket:
+      bucket:
+      sorName: DEMO_BUCKET
+  security:
+    enabled: true
+  xap:
+    lookupGroups: 16.4.0
+    lookupLocators: xap
+    security:
+      service:
+        name: xap-security
+        port: 9000
+    authorityCheckUrl: "/oauth2/v1/authority-check"
+tags:
+  oracle: false
+  iidr: false
+diMdm:
+  image:
+    repository: gigaspaces/di-mdm
+    tag: 2.10.3
+    pullPolicy: IfNotPresent
+  affinity:
+    enabled: true
+    value: di
+  doGlobalConfig: false
+  repositoryProfile: sqlite
+  # when available zookeeper should be used
+  # repositoryProfile: zookeeper
+  resources: {}
+diManager:
+  image:
+    repository: gigaspaces/di-manager
+    tag: "2.12.6"
+    pullPolicy: IfNotPresent
+  security:
+    kid: "common"
+    privateKeySecret: di-private-key
+    privateKeyPath: /opt/di/security/key
+    tokenValidityDays: 365
+    tokenPrivileges: >
+      SpacePrivilege EXECUTE, SpacePrivilege ALTER, SpacePrivilege WRITE, SpacePrivilege READ, SpacePrivilege TAKE, SpacePrivilege CREATE
+
+  resources: {}
+diProcessor:
+  image:
+    repository: gigaspaces/di-processor
+    tag: 2.3.9
+    pullPolicy: IfNotPresent
+diOperator:
+  enabled: false
+  image:
+    repository: gigaspaces/di-centos8
+    tag: "1.1"
+    pullPolicy: IfNotPresent
+  mountVolume: di
+  affinity:
+    enabled: true
+    value: di
+  resources: {}

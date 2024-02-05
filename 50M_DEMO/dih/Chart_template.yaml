@@ -1,0 +1,98 @@
+name: dih
+apiVersion: v2
+version: "$global"
+appVersion: "$global"
+description: A Helm chart for DIH
+dependencies:
+  - name: di
+    alias: di
+    condition: di.enabled
+    repository: https://s3.amazonaws.com/resources.gigaspaces.com/helm-charts-dih
+    version: $di
+  - name: di-flink
+    alias: flink
+    condition: flink.enabled
+    repository: https://s3.amazonaws.com/resources.gigaspaces.com/helm-charts-dih
+    version: $flink
+  - name: grafana
+    alias: grafana
+    condition: grafana.enabled
+    repository: https://grafana.github.io/helm-charts
+    version: $grafana
+  - name: influxdb
+    alias: influxdb
+    condition: metrics.enabled
+    repository: https://s3.amazonaws.com/resources.gigaspaces.com/helm-charts-dih
+    version: $influxdb
+  - name: kafka
+    condition: kafka.enabled
+    repository: https://charts.bitnami.com/bitnami
+    version: $kafka
+  - name: kafka-ui
+    alias: redpanda
+    condition: redpanda.enabled
+    repository: https://s3.amazonaws.com/resources.gigaspaces.com/helm-charts-dih
+    version: $kafkaui
+  - name: service-creator
+    alias: service-creator
+    condition: service-creator.enabled
+    repository: https://s3.amazonaws.com/resources.gigaspaces.com/helm-charts-dih
+    version: $service-creator
+  - name: service-operator
+    alias: service-operator
+    condition: service-operator.enabled
+    repository: https://s3.amazonaws.com/resources.gigaspaces.com/helm-charts-dih
+    version: $service-operator
+  - name: spacedeck
+    alias: spacedeck
+    condition: spacedeck.enabled
+    repository: https://s3.amazonaws.com/resources.gigaspaces.com/helm-charts-dih
+    version: $spacedeck
+  - name: xap-manager
+    alias: manager
+    condition: manager.enabled
+    repository: https://s3.amazonaws.com/resources.gigaspaces.com/helm-charts-dih
+    version: $xap-manager
+  - name: xap-operator
+    alias: operator
+    condition: operator.enabled
+    repository: https://s3.amazonaws.com/resources.gigaspaces.com/helm-charts-dih
+    version: $xap-operator
+  - name: xap-dgw
+    alias: dgw
+    condition: dgw.enabled
+    repository: https://s3.amazonaws.com/resources.gigaspaces.com/helm-charts-dih
+    version: $xap-dgw
+  - name: iidr-as
+    alias: iidrAS
+    repository: https://s3.amazonaws.com/resources.gigaspaces.com/helm-charts-dih
+    version: $iidr-as
+    tags:
+      - iidr
+  - name: iidr-kafka
+    alias: iidrKafka
+    repository: https://s3.amazonaws.com/resources.gigaspaces.com/helm-charts-dih
+    version: $iidr-kafka
+    tags:
+      - iidr
+  - name: di-subscription-manager
+    alias: diSubscriptionManagerIidr
+    repository: https://s3.amazonaws.com/resources.gigaspaces.com/helm-charts-dih
+    version: $subscription-manager
+    tags:
+      - iidr
+  - name: di-subscription-manager
+    alias: diSubscriptionManagerS3
+    condition: global.s3.enabled
+    repository: https://s3.amazonaws.com/resources.gigaspaces.com/helm-charts-dih
+    version: $subscription-manager
+  - name: prometheus
+    alias: prometheus
+    condition: prometheus.enabled
+    repository: https://prometheus-community.github.io/helm-charts
+    version: $prometheus
+  - name: operator
+    alias: minio-operator
+    condition: global.minio.enabled
+    repository: https://operator.min.io/
+    version: $minio-operator

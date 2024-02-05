@@ -1,0 +1,132 @@
+{{- if .Values.global.minio.enabled }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ .Release.Name }}-minio-bucket-builder-role
+  namespace: {{ .Release.Namespace }}
+rules:
+  - apiGroups: [ "", "apiextensions.k8s.io", "apps" ]
+    resources: [ "pods", "services", "deployments", "configmaps", "secrets", "ingresses", "jobs", "persistentvolumeclaims", "customresourcedefinitions" ]
+    verbs: [ "get", "list", "create", "update", "delete", "deletecollection", "patch" ]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ .Release.Name }}-minio-bucket-builder-binding
+  namespace: {{ .Release.Namespace }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ .Release.Name }}-minio-bucket-builder-role
+subjects:
+  - kind: ServiceAccount
+    name: {{ .Release.Name }}-minio-bucket-builder-sa
+    namespace: {{ .Release.Namespace }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ .Release.Name }}-minio-bucket-builder-cluster-role
+rules:
+  - apiGroups: ["", "apiextensions.k8s.io", "minio.min.io"]
+    resources: ["customresourcedefinitions", "namespaces", "tenants"]
+    verbs: ["get", "list", "watch", "create", "update", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ .Release.Name }}-minio-bucket-builder-cluster-role-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ .Release.Name }}-minio-bucket-builder-cluster-role
+subjects:
+  - kind: ServiceAccount
+    name: {{ .Release.Name }}-minio-bucket-builder-sa
+    namespace: {{ .Release.Namespace }}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ .Release.Name }}-minio-bucket-builder-sa
+  namespace: {{ .Release.Namespace }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-minio-bucket-builder-job
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-weight": "0"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    "app.kubernetes.io/instance": {{ .Release.Name }}
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: minio-start-job
+          image: "{{ .Values.minio.postStartHookImage.repository }}:{{ .Values.minio.postStartHookImage.tag }}"
+          imagePullPolicy: Always
+          env:
+            - name: NAMESPACE
+              value: {{ .Release.Namespace }}
+            - name: TENANT_NAME
+              value: {{ .Values.global.minio.tenantName }}
+            - name: BUCKET_TO_CREATE
+              value: "{{- include "flink.high-availability.bucket" . }}"
+            - name: MINIO_CONFIG
+              value: "{{ .Values.global.minio.tenantName }}-config-alias"
+            - name: MINIO_TAG
+              value: {{ .Values.minio.image.tag }}
+            - name: MINIO_IMAGE
+              value: {{ .Values.minio.image.repository }}
+            - name: CAPACITY
+              value: {{ .Values.minio.postStartHookImage.capacity | quote }}
+            - name: SERVERS
+              value: {{ .Values.minio.postStartHookImage.servers | quote }}
+            - name: VOLUMES
+              value: {{ .Values.minio.postStartHookImage.volumes | quote }}
+            - name: RELEASE_NAME
+              value: {{ .Release.Name }}
+            - name: MODE
+              value: "CREATE"
+      serviceAccountName: {{ .Release.Name }}-minio-bucket-builder-sa
+      securityContext:
+        runAsUser: 0
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-minio-tenant-destroyer-job
+  annotations:
+    "helm.sh/hook": pre-delete
+    "helm.sh/hook-weight": "0"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    "app.kubernetes.io/instance": {{ .Release.Name }}
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: minio-delete-job
+          image: "{{ .Values.minio.postStartHookImage.repository }}:{{ .Values.minio.postStartHookImage.tag }}"
+          imagePullPolicy: Always
+          env:
+            - name: NAMESPACE
+              value: {{ .Release.Namespace }}
+            - name: TENANT_NAME
+              value: {{ .Values.global.minio.tenantName }}
+            - name: BUCKET_TO_CREATE
+              value: "{{- include "flink.high-availability.bucket" . }}"
+            - name: MINIO_CONFIG
+              value: "{{ .Values.global.minio.tenantName }}-config-alias"
+            - name: MINIO_TAG
+              value: {{ .Values.minio.image.tag }}
+            - name: MODE
+              value: "DESTROY"
+      serviceAccountName: {{ .Release.Name }}-minio-bucket-builder-sa
+      securityContext:
+        runAsUser: 0
+{{- end }}

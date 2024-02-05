@@ -1,0 +1,42 @@
+global:
+  imagePullSecrets:
+    - myregistrysecret
+  mdmServerUrl: http://di-mdm:6081
+  iidrAsHost: iidr-as
+  iidrAsPort: "10101"
+  kafkaHost: kafka
+  kafkaPort: "9092"
+  iidrKafkaHost: iidr-kafka
+  iidrKafkaPort: "11701"
+  iidrAsUsername: admin
+  iidrAsPassword: password123
+  iidrKafkaPropertiesManagerHost: http://iidr-kafka
+  iidrKafkaPropertiesManagerPort: 6085
+  ingressHost:
+  flink:
+    highAvailability:
+      bucket:
+      parentDirOverride:
+  minio:
+    tenantName: minio-tenant
+    enabled: false
+  s3:
+    enabled: false
+  security:
+    enabled: true
+s3:
+  #secret name for retrieving AWS access and secret keys
+  secretName: s3-user
+envs:
+  iidrKafkaPropertiesManagerClientTimeoutsConnectionMs: "10000"
+  iidrKafkaPropertiesManagerClientTimeoutsReadMs: "60000"
+  iidrKafkaUserExitPropertiesFileUseApi: "true"
+  serverPort: "6082"
+connectorType: iidr
+image:
+  repository: gigaspaces/di-subscription-manager
+  tag: 1.13.2
+affinity:
+  enabled: false
+  value: iidr
+resources: {}

@@ -1,0 +1,121 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: di-manager
+  name: di-manager
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: di-manager
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose -f docker-compose.v3.yaml convert -c
+        kompose.version: 1.28.0 (HEAD)
+      labels:
+        io.kompose.network/docker-di: "true"
+        io.kompose.service: di-manager
+    spec:
+      initContainers:
+        - name: di-processor
+          env:
+            - name: MDM_SERVER_FALLBACK-URL
+              value: {{ .Values.global.mdmServerUrl }}
+            - name: MDM_SERVER_URL
+              value: {{ .Values.global.mdmServerUrl }}
+            - name: DESTINATION_DIR
+              value: /di-jars
+          image: {{ .Values.diProcessor.image.repository }}:{{ .Values.diProcessor.image.tag }}
+          imagePullPolicy: {{ .Values.diProcessor.image.pullPolicy }}
+          volumeMounts:
+            - name: di-jars
+              mountPath: /di-jars
+      containers:
+        - name: di-manager
+          {{- if and (.Values.global.s3.enabled) (.Values.global.s3.defaultS3Bucket.bucket) }}
+          lifecycle:
+            postStart:
+              exec:
+                command:
+                  - "/bin/sh"
+                  - "-c"
+                  - |
+                    MAX_TRIES=60
+                    COUNT=0
+                    until curl -f -X POST \
+                      -H 'Content-Type: application/json' \
+                      -d '{"sorName":"{{ .Values.global.s3.defaultS3Bucket.sorName }}", "dbProvider":"S3", "url":"s3://{{ .Values.global.s3.defaultS3Bucket.bucket }}"}' \
+                      http://localhost:6080/api/v1/datasource/save-connection
+                    do
+                      COUNT=$((COUNT+1))
+                      echo "Try number $COUNT from $MAX_TRIES. Waiting for di services to be available..."
+                      if [ "$COUNT" -eq "$MAX_TRIES" ]; then
+                        echo "Reached maximum attempts = $MAX_TRIES. Can not add default s3 datastore."
+                        exit 1
+                      fi
+                      sleep 5
+                    done
+          {{- end}}
+          env:
+            {{- if .Values.global.security.enabled}}
+            - name: SECURITY_ENABLED
+              value: "{{ .Values.global.security.enabled }}"
+            - name: KID
+              value: {{ .Values.diManager.security.kid }}
+            - name: SECURITY_BASE_URL
+              value: "http://{{ .Values.global.xap.security.service.name }}-service:{{ .Values.global.xap.security.service.port }}"
+            - name: AUTHORITY_CHECK_URL
+              value: {{ .Values.global.xap.authorityCheckUrl }}
+            - name: TOKEN_PRIVILEGES
+              value: {{ .Values.diManager.security.tokenPrivileges }}
+            - name: TOKEN_VALIDITY_DAYS
+              value: "{{ .Values.diManager.security.tokenValidityDays }}"
+            - name: SECURITY_PRIVATE_KEY_PATH
+              value: {{ .Values.diManager.security.privateKeyPath }}
+            {{- end}}
+            - name: MDM_SERVER_FALLBACK-URL
+              value: {{ .Values.global.mdmServerUrl }}
+            - name: MDM_SERVER_URL
+              value: {{ .Values.global.mdmServerUrl }}
+          image: {{ .Values.diManager.image.repository }}:{{ .Values.diManager.image.tag }}
+          imagePullPolicy: {{ .Values.diManager.image.pullPolicy }}
+          ports:
+            - containerPort: 6080
+          resources: {{ toYaml .Values.diManager.resources | nindent 12 }}
+          volumeMounts:
+            - name: di-jars
+              mountPath: /di-jars
+            {{- if .Values.global.security.enabled }}
+            - name: di-private-key
+              mountPath: {{ .Values.diManager.security.privateKeyPath }}
+              subPath: key
+              readOnly: true
+            {{- end }}
+      {{- if .Values.diManager.nodeSelector }}
+      nodeSelector:
+      {{- toYaml .Values.diManager.nodeSelector | nindent 8 }}
+      {{- end }}
+      restartPolicy: Always
+      volumes:
+        - name: di-jars
+          emptyDir: {}
+        {{- if .Values.global.security.enabled }}
+        - name: di-private-key
+          secret:
+            secretName: {{ .Values.diManager.security.privateKeySecret }}
+        {{- end }}
+      {{- include "di.imagePullSecrets" . | nindent 6 }}
+---
+
+{{- if .Values.global.security.enabled }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: di-private-key
+type: Opaque
+data:
+  key: LS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0tCk1JSUV2Z0lCQURBTkJna3Foa2lHOXcwQkFRRUZBQVNDQktnd2dnU2tBZ0VBQW9JQkFRRFJZdEJFdWFhZW83NTMKYndLSm9INmtyNk5rdVZCRHBpdFBkZ2JUK1hOODlqdGFYcUNWNUZyN1JQTmlzSHl4VmJFWUhXZndnbE82cGZIQgpiUGJsaUVTNW5iSHZGNVlhYWNFWXo5cTVXaExuSGViS2JHMHRZd25IUkkyaHdxSXhtZU1jMmJuL2JxaVQ3OUdHClNOLzUzaXhyRmdRU3RGSjc1cVVKU2RGZThMVzZWWlJYbEFPenZUNHg2OWdialRHY2NEWHk0V2RaZERtVTVxcjgKdDN6bVptVmRkY3BhY0ZkZDcyaDIyOE5RaHNlcXFteFVvckI3VG9FU0laTVZzYnhmZVBrSytHVHhHRHRKMmF6MQpNSndSemR4QW5Bb3NmbXRqa0g3dDZYVkQ2b1Z4YVkwYUpXWHliZFJrNjlDa2didzdERGJMeFNmSFlRZEFDRXpzCmRaa0lDZy9QQWdNQkFBRUNnZ0VBVDRtb3NhS1FMNHpsNmpxS0RUdWhQKy9VTW92T2VKUWp1YUNOQVhLdHN4ZFoKL244Wm96YkdkTktCWGNqSzVSWTNHb0Q1SGJ4MEQ5Ky9rUWxTVkdqS0tuUkR4aDRBai9JQ1B1bWVIWENnNDVoUgpOaTJ2MzJEU3N4WlFjdFViaFpuK1V0UkdPa2lQMHZwemJmNDZ6cERkOEtQQlVsV2JTNk9XcDR1WjgrV2VNclJsCk8zWWpJaUVaT1BPUmU1endyeFVvUU5xQVJwd204RnBJREdNRUVHcTFLSU9QTTM4OXVZaG14ZWp4eXJ0bW9neG0KSStGSzdxNmRrRVVoU2JoVnlhdGxEWG82VjZZN2ZxRTkrSUtWRnJIbnc1cDR2N0wwNXc4RVdwcDUzVWd2UVVFbQpxOWpaclBkWUZoaTlTaVpIalVGQ243NWkzLy9Pa2JBK2g0bzlQM1ROU1FLQmdRRDRaVUEvNlpNY042V2lhTlBQCjJTWHh2bkVBTG1JRmpScnJDRWIwaThOMFBISmdnazhDanFzN1V6WWUxeXBMTCtPbHBuakYzQW14ZFpmQkRGOTEKeXFMTmpCZTRwd3huSE9jSXdKNnN6K3ZQWkRWMlgrWnYxRVVGQ295SE9RUzVIU1RRNmlSeW0rc1hCaU9IYStyawpnSXJQZTd6UFI4NGVieHhXZ3hMYVBhTXJLd0tCZ1FEWHk5VmJrNzVaMnlEdHdVMGw5S0ZuR0hpb3VQR2hlQ0NQCnV1ZUxybTBmd3MwNVZuN3FrNHBOOWNHTjJyaDBrVFFxcm5VZWtCTXI1MzdrMnk5Qm1CQkxHT0F6cXkrQ2p5K1MKekdmcjd0dEtHalhrb2pMNW1IS2NGV204NXRXQkNwc1lGcUUxYTJxTm1hME5Xbnl2Y1p3aGZWNys2dUhZL3RhTQordmViWGtETDdRS0JnRlJnWUlEVllRbDJ4YWJ6b08rN3ZhM3VtUWdNdVhOVlNVMkpWRUVCc1BVdEMxVkpMbm1aCjZRU1A4WlJzVm91UHl1NmNLKzVhSGxqUHJ5citmdmJPVEpzeCtXVGFLZFprOVAzK0lHaG5nSnpFVjN6TWVzU0cKQUtRRHYxUzN3NmoyQTJtTC83R0cwVWJTNlFLNVgrTWEzd3czNWgwck1STVpmekRMK1gxMDdwWmRBb0dCQU5MQworZmNmTFdLRmFudkx0NVhDZjRFNW5WN3NndEs1aU5QWU1CMTBsby9XcXFtOW1PZHlnam55Tk1CZlJwaFMyU2gyCmkxejJTa012TGZoSE9yaE4xRndFUjdVdkZJL25XUWQvTEdCNlFTTDJ4bnd2RHFwSUFtZi9ZZTVsWlZGTEVuOU0KV3RiWnVvL2g3K3FDM2hSY1dhazcwWFFYNDgwVDJHaUpGUnhoeWRkaEFvR0JBT1FIQTZEN1pxcjc3S25rQ2lmVwo0OTl2RGxtKyt3a041THZGc25wZUszNFdyY3dXc1o1YjFTZ3EvVm1lbVdKdDFvWXBCYXFLa1lMQ0dBSHdvc2xPCmg2Q1EwaGVpdy9SUEErcUhvaWdUZVNLbFQxU0NuOEQ5ZUxPT2VDdURsNkIwdzY5U2VBYU1uRjV0dEtpSFFqWEcKbW0zYmFaWmFleWpaSHlqWVpaYTNSTE0zCi0tLS0tRU5EIFBSSVZBVEUgS0VZLS0tLS0K
+{{- end}}

@@ -1,0 +1,19 @@
+{{- $port := .Values.webhook.port }}
+{{- $keyStore := .Values.webhook.keyStore }}
+{{- $keyStorePassword := .Values.webhook.keyStorePassword }}
+{{- $keyStoreType := .Values.webhook.keyStoreType }}
+
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: cache-operator-config
+  namespace: {{ .Release.Namespace }}
+data:
+  application.yml: |-
+    server:
+      port: {{$port}}
+      ssl:
+        enabled: true
+        key-store: {{$keyStore}}
+        key-store-password: {{$keyStorePassword}}
+        key-store-type: {{$keyStoreType}}

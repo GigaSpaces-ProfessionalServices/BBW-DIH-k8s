@@ -1,0 +1,19 @@
+{{- $namespace :=  .Values.namespace | default .Release.Namespace }}
+{{- $image := .Values.operatorConfig.image }}
+
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: operator-config
+  namespace: {{$namespace}}
+data:
+  application.yml: |-
+    memoryLimit: {{ .Values.operatorConfig.memoryLimit | default "400Mi" }}
+    cpuLimit: {{ .Values.operatorConfig.cpuLimit | default (default 1) }}
+    controllerClass: {{ .Values.operatorConfig.controllerClass | default "nginx" }}
+    host: {{ .Values.global.ingressHost }}
+    image: {{ $image }}
+    {{- if .Values.global.security.enabled }}
+    tokenServiceConfig: {{ toYaml .Values.operatorConfig.tokenServiceConfig | nindent 6 }}
+      securityServerUrl: "http://{{ .Values.global.xap.security.service.name }}-service:{{ .Values.global.xap.security.service.port }}"
+    {{- end }}

@@ -1,0 +1,22 @@
+global:
+  imagePullSecrets:
+    - myregistrysecret
+  kafkaHost: kafka
+  kafkaPort: "9092"
+  iidrKafkaPropertiesManagerPort: 6085
+
+image:
+  repository: gigaspaces/di-iidr-kafka
+  tag: 2.1.0
+  imagePullPolicy: IfNotPresent
+envs:
+  userExitPropertiesFileDir: /iidr-kafka/conf
+volumes:
+  iidrKafka:
+    resources:
+      requests:
+        storage: 1000Mi
+affinity:
+  enabled: false
+  value: iidr
+resources: {}

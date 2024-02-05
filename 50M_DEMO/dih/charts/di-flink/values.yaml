@@ -1,0 +1,66 @@
+global:
+  flink:
+    highAvailability:
+      enabled: true
+      bucket:
+      parentDirOverride:
+  minio:
+    tenantName: minio-tenant
+    enabled: false
+  s3:
+    enabled: false
+
+s3:
+  #secret name for retrieving AWS access and secret keys
+  secretName: s3-user
+
+image:
+  repository: gigaspaces/di-flink
+  tag: 1.17.1-0
+  pullPolicy: IfNotPresent
+  init:
+    repository: busybox
+    tag: 1.36.0
+state:
+  backend:
+    type: filesystem
+    incremental: false
+jobmanager:
+  memoryRequestSize: 2.2G
+  memoryProcessSize: 2000m
+  jvmMetaspaceSize: 500m
+  replicas: 1
+taskmanager:
+  numberOfTaskSlots: 10
+  memoryRequestSize: 2.2G
+  memoryProcessSize: 2000m
+  jvmMetaspaceSize: 500m
+  replicas: 2
+  jobLogLevel: INFO
+  jobLogPackage: com.gigaspaces
+pvc:
+  storage: 1000Mi
+highAvailability:
+  mode:
+    nodeLocal:
+      storage:
+        dir: /flink/highAvailabilityStorage
+      checkpoints:
+        dir: /flink/checkpoints
+      savepoints:
+        dir: /flink/savepoints
+  clusterId: k8-cluster-id
+  type: zookeeper
+  zookeeperQuorum: zookeeper:2181
+rootLoggerLevel: INFO
+metrics:
+  enabled: true
+  db: mydb
+  host: influxdb
+  port: 8086
+affinity:
+  #when undefined, affinity is resolved automatically based on usage mode (s3 or node local storage)
+  enabled:
+  value: flink
+env:
+  builtInPlugins:

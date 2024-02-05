@@ -1,0 +1,13 @@
+{{- if (include "flink.nodeLocalMode" .) }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: flink
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.pvc.storage }}
+status: {}
+{{- end }}

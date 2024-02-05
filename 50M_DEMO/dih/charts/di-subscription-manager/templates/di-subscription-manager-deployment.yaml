@@ -1,0 +1,126 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.network/docker-di: "true"
+    com.gigaspaces.di.service: "di-subscription-manager-{{ .Values.connectorType }}"
+  name: "di-subscription-manager-{{ .Values.connectorType }}"
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      com.gigaspaces.di.service: "di-subscription-manager-{{ .Values.connectorType }}"
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        io.kompose.network/docker-di: "true"
+        com.gigaspaces.di.service: "di-subscription-manager-{{ .Values.connectorType }}"
+        {{- if .Values.affinity.enabled }}
+        deployment.affinity: {{ .Values.affinity.value }}
+        {{- end }}
+      name: di-subscription-manager
+      namespace: {{ .Release.Namespace }}
+    spec:
+      containers:
+        - env:
+            - name: IIDR_AS_HOSTNAME
+              value: "{{ .Values.global.iidrAsHost }}"
+            - name: IIDR_AS_PORT
+              value: "{{ .Values.global.iidrAsPort }}"
+            - name: KAFKA_HOST
+              value: "{{ .Values.global.kafkaHost }}"
+            - name: KAFKA_PORT
+              value: "{{ .Values.global.kafkaPort }}"
+            - name: IIDR_KAFKA_HOST
+              value: "{{ .Values.global.iidrKafkaHost }}"
+            - name: IIDR_KAFKA_PORT
+              value: "{{ .Values.global.iidrKafkaPort }}"
+            - name: MDM_SERVER_FALLBACK-URL
+              value: "{{ .Values.global.mdmServerUrl }}"
+            - name: MDM_SERVER_URL
+              value: "{{ .Values.global.mdmServerUrl }}"
+            - name: IIDR_AS_USERNAME
+              value: "{{ .Values.global.iidrAsUsername }}"
+            - name: IIDR_AS_PASSWORD
+              value: "{{ .Values.global.iidrAsPassword }}"
+            - name: IIDR-KAFKA_PROPERTIES_MANAGER_CLIENT_TIMEOUTS_CONNECTION_MS
+              value: "{{ .Values.envs.iidrKafkaPropertiesManagerClientTimeoutsConnectionMs }}"
+            - name: IIDR-KAFKA_PROPERTIES_MANAGER_CLIENT_TIMEOUTS_READ_MS
+              value: "{{ .Values.envs.iidrKafkaPropertiesManagerClientTimeoutsReadMs }}"
+            - name: IIDR-KAFKA_PROPERTIES_MANAGER_SERVER_URL
+              value: "{{ .Values.global.iidrKafkaPropertiesManagerHost }}:{{ .Values.global.iidrKafkaPropertiesManagerPort }}"
+            - name: IIDR-KAFKA_USER-EXIT_PROPERTIES_FILE_USE-API
+              value: "{{ .Values.envs.iidrKafkaUserExitPropertiesFileUseApi }}"
+            - name: SUBSCRIPTION_MANAGER_SERVER_URL
+              value: "http://di-subscription-manager-{{ .Values.connectorType }}:{{ .Values.envs.serverPort }}"
+            - name: SUBSCRIPTION_MANAGER_CONNECTOR_TYPE
+              value: "{{ include "getConnectorType" . }}"
+            {{- if or (.Values.global.minio.enabled) (.Values.global.s3.enabled) }}
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  {{- if .Values.global.minio.enabled }}
+                  name: {{ .Values.global.minio.tenantName }}-user-1
+                  optional: false
+                  {{- else }}
+                  name: {{ .Values.s3.secretName }}
+                  optional: true
+                  {{- end }}
+                  {{- if .Values.global.minio.enabled }}
+                  key: CONSOLE_ACCESS_KEY
+                  {{- else }}
+                  key: ACCESS_KEY
+                  {{- end }}
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  {{- if .Values.global.minio.enabled }}
+                  name: {{ .Values.global.minio.tenantName }}-user-1
+                  optional: false
+                  {{- else }}
+                  name: {{ .Values.s3.secretName }}
+                  optional: true
+                  {{- end }}
+                  {{- if .Values.global.minio.enabled }}
+                  key: CONSOLE_SECRET_KEY
+                  {{- else }}
+                  key: SECRET_KEY
+                  {{- end }}
+            {{- end }}
+          image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+          name: di-subscription-manager
+          lifecycle:
+            postStart:
+              exec:
+                command: [ "/bin/sh", "-c", "(sudo mkdir -p /di/iidr-kafka && sudo chown gsods:gsods /di/iidr-kafka)" ]
+          ports:
+            - containerPort: 6082
+          resources: {{ toYaml .Values.resources | nindent 12 }}
+      restartPolicy: Always
+      {{- include "di.imagePullSecrets" . | nindent 6 }}
+      volumes:
+      {{- if eq (include "getConnectorType" .) (include "iidrConnectorType" .) }}
+        - name: iidr
+          persistentVolumeClaim:
+            claimName: iidr
+      {{- end }}
+      {{- if .Values.nodeSelector }}
+      nodeSelector:
+      {{- toYaml .Values.nodeSelector | nindent 8 }}
+      {{- end }}
+      {{- if .Values.affinity.enabled }}
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: deployment.affinity
+                    operator: In
+                    values:
+                      - {{ .Values.affinity.value }}
+              topologyKey: "kubernetes.io/hostname"
+      {{- end }}
+status: {}

@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f ../docker-compose.full.yaml -c
+    kompose.version: 1.7.0 (HEAD)
+  labels:
+    com.gigaspaces.di.service: "di-subscription-manager-{{ .Values.connectorType }}"
+  name: "di-subscription-manager-{{ .Values.connectorType }}"
+spec:
+  ports:
+    - name: "6082"
+      port: 6082
+      targetPort: 6082
+  selector:
+    com.gigaspaces.di.service: "di-subscription-manager-{{ .Values.connectorType }}"
+status:
+  loadBalancer: {}
