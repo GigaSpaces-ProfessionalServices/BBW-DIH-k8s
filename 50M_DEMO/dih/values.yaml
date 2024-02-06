@@ -248,7 +248,8 @@ xap-dgw:
 
 service-operator:
   enabled: true
-
+  operatorConfig:
+    memoryLimit: 1000Mi
 service-creator:
   enabled: true
 

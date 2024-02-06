@@ -8,9 +8,9 @@ export const options = {
     per_vu_iterations: {
       executor: 'per-vu-iterations',
       startTime: '0s',
-      vus: 30,
-      iterations: 1500,
-      maxDuration: '10s',
+      vus: 1000,
+      iterations: 1000,
+      maxDuration: '1m',
     },
   },
   ext: {
@@ -30,7 +30,7 @@ export default function () {
   let url = `https://bbw-gs/api/get-emp-id?EMPID=${randomEmpId}`;
 
   // Log the URL before making the request
-  console.log(`Calling to: ${url}`);
+  console.log(`Calling: ${url}`);
 
   let response = http.get(url);
 
