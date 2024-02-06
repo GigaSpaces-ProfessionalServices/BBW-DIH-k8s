@@ -1,0 +1,42 @@
+spacedeck:
+  resources:
+    requests:
+      memory: "1000Mi"
+      cpu: "1000m"
+    limits:
+      memory: "2000Mi"
+      cpu: "1000m"
+manager:
+  resources:
+    requests:
+      memory: "2000Mi"
+      cpu: "1000m"
+    limits:
+      memory: "2400Mi"
+      cpu: "2000m"
+operator:
+  resources:
+    requests:
+      memory: "2000Mi"
+      cpu: "1000m"
+    limits:
+      memory: "2400Mi"
+      cpu: "2000m"
+service-creator:
+  resources:
+    requests:
+      memory: "2000Mi"
+      cpu: "1000m"
+    limits:
+      memory: "2400Mi"
+      cpu: "2000m"
+
+service-operator:
+  resources:
+    requests:
+      memory: "2000Mi"
+      cpu: "1000m"
+    limits:
+      memory: "2400Mi"
+      cpu: "2000m"
+

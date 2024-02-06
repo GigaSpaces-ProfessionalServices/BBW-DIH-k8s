@@ -1,6 +1,12 @@
 #!/bin/bash
 source ./demoEnv.sh
-SPACE_MEM_LIMITS=$(printf "%.0f" $(echo "${SPACE_JAVA_HEAP} * 1.25" | bc))
+echo "Waiting for xap-operator to be available before deploying the space ..."
+while [[ $(kubectl get pods |grep xap-operator |grep -i running |wc -l) -ne 1 ]];do
+  echo -ne '#'
+  sleep 5
+done
+sleep 3
+
 echo "Deploying $SPACE_NAME space ..."
 echo
 helm install ${SPACE_NAME} ${DIH_HELM_REPO_NAME}/xap-pu --version ${DIH_XAP_PU_VERSION} \
