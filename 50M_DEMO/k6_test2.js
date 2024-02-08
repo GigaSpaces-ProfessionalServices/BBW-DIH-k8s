@@ -10,7 +10,7 @@ export const options = {
       startTime: '0s',
       vus: 1000,
       iterations: 1000,
-      maxDuration: '1m',
+      maxDuration: '4m',
     },
   },
   ext: {

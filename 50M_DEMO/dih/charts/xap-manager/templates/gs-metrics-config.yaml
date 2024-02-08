@@ -81,6 +81,7 @@ data:
             <metric prefix="os"        sampler="low"/>
             <metric prefix="os_memory" sampler="high"/>
             <metric prefix="os_cpu"    sampler="off"/>
+            <metric prefix="space"     sampler="high"/>
             -->
             <!-- NOTE: on some environments the process cpu metrics may impact performance - to turn them off simply uncomment the following line -->
             <!--<metric prefix="process_cpu" sampler="off"/>-->
