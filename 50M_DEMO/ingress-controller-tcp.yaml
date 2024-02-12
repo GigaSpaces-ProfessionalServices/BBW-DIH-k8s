@@ -13,7 +13,8 @@ tcp:
   10101: "default/iidr-as:10101"
   1521: "default/di-oracledb:1521"
   8015: "default/oracle-feeder-service:8015"
- # 8081: "default/bbw-kafka-producer-svc:8081"
+  5000: "deafult/service-creator:8080"
+  # 8081: "default/bbw-kafka-producer-svc:8081"
  # 6085: "default/bbw-dih-pc-pluggable-connector:6085"
 ###################################################################################################
 # To configure ingress-controller as Internal LB, uncomment the following depends on your vendor: #
