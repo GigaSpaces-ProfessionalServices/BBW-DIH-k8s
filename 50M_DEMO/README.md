@@ -10,10 +10,12 @@ We created this demo for BBW to demonstrate DIH massive data load capabilities.
 * Oracle feeder
 
 ### azure linux vm (Oracle Database)
+* Standard B16ms (16 vcpus, 64 GiB memory)
 * Oracle 19c 
-* K6
+* K6 for load test
 
 ### azure Windoes vm (UI)
+*  1 Standard B4ms (4 vcpus, 16 GiB memory)
 * Chrome for UI (Spacedeck, OPSui, Grafana)
 * mobaXterm
 
