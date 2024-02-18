@@ -3,6 +3,8 @@ source ./demoEnv.sh
 # Create secrets for dockerhub
 kubectl create secret docker-registry myregistrysecret --docker-server=${GS_REGISTRY_SERVER} --docker-username=${GS_REGISTRY_USER} --docker-password=${GS_REGISTRY_PASS} --docker-email=${GS_REGISTRY_EMAIL}
 
+# Xreate a secret for s3-buckt
+kubectl apply -f s3-user.yaml
 # Create and update helm repositories
 helm repo add ${DIH_HELM_REPO_NAME} ${DIH_HELM_REPO_URL}
 helm repo add ${INGRESS_CNTRL_HELM_REPO_NAME} ${INGRESS_CNTRL_HELM_REPO_URL}

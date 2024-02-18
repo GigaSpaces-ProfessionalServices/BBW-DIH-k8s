@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: s3-user
+type: Opaque
+data:
+  AWS_ACCESS_KEY_ID: AKIAW2PU5EDUJ6HLLFWK 
+  AWS_SECRET_ACCESS_KEY: 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
